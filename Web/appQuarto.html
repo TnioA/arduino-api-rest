@@ -1,0 +1,305 @@
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Control - Arduino Mega</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 15px;
+        border-radius: 5px;
+        background: #9d9d9d;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        }
+
+        .slider:hover {
+        opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #00bc8c;
+        cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #00bc8c;
+        cursor: pointer;
+        }
+    </style>
+    </head>
+    <body>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Arduino Control Room</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav text-white mb-3">
+                    <div class="form-check nav-item mt-3 ml-4">
+                        <input class="form-check-input" type="checkbox" value="" id="CheckNivelLuz" onclick="VerificarInformacoesTela()">
+                        <label class="form-check-label" for="CheckNivelLuz">
+                        Nível de Luz
+                        </label>
+                    </div>
+                    <div class="form-check nav-item mt-3 ml-4">
+                        <input class="form-check-input" type="checkbox" value="" id="CheckControlePorta" onclick="VerificarInformacoesTela()">
+                        <label class="form-check-label" for="CheckControlePorta">
+                        Controle da Porta
+                        </label>
+                    </div>
+                    <div class="form-check nav-item mt-3 ml-4">
+                        <input class="form-check-input" type="checkbox" value="" id="CheckTemperatura" onclick="VerificarInformacoesTela()">
+                        <label class="form-check-label" for="CheckTemperatura">
+                        Temperatura
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+
+        <div class="container">
+            <div class="bs-docs-section">
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 id="buttons"> </h1>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="bs-component">
+                            <div class="row">
+                                <div class="col-md-3 col-6">
+                                    <button type="button" class="btn btn-block btn-outline-success">
+                                        <svg width="70" height="70" viewBox="0 0 16 16" class="bi bi-sun" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3.5 8a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0z"/>
+                                            <path fill-rule="evenodd" d="M8.202.28a.25.25 0 0 0-.404 0l-.91 1.255a.25.25 0 0 1-.334.067L5.232.79a.25.25 0 0 0-.374.155l-.36 1.508a.25.25 0 0 1-.282.19l-1.532-.245a.25.25 0 0 0-.286.286l.244 1.532a.25.25 0 0 1-.189.282l-1.509.36a.25.25 0 0 0-.154.374l.812 1.322a.25.25 0 0 1-.067.333l-1.256.91a.25.25 0 0 0 0 .405l1.256.91a.25.25 0 0 1 .067.334L.79 10.768a.25.25 0 0 0 .154.374l1.51.36a.25.25 0 0 1 .188.282l-.244 1.532a.25.25 0 0 0 .286.286l1.532-.244a.25.25 0 0 1 .282.189l.36 1.508a.25.25 0 0 0 .374.155l1.322-.812a.25.25 0 0 1 .333.067l.91 1.256a.25.25 0 0 0 .405 0l.91-1.256a.25.25 0 0 1 .334-.067l1.322.812a.25.25 0 0 0 .374-.155l.36-1.508a.25.25 0 0 1 .282-.19l1.532.245a.25.25 0 0 0 .286-.286l-.244-1.532a.25.25 0 0 1 .189-.282l1.508-.36a.25.25 0 0 0 .155-.374l-.812-1.322a.25.25 0 0 1 .067-.333l1.256-.91a.25.25 0 0 0 0-.405l-1.256-.91a.25.25 0 0 1-.067-.334l.812-1.322a.25.25 0 0 0-.155-.374l-1.508-.36a.25.25 0 0 1-.19-.282l.245-1.532a.25.25 0 0 0-.286-.286l-1.532.244a.25.25 0 0 1-.282-.189l-.36-1.508a.25.25 0 0 0-.374-.155l-1.322.812a.25.25 0 0 1-.333-.067L8.203.28zM8 2.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z"/>
+                                          </svg>
+                                    </button>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <button type="button" class="btn btn-block btn-outline-success">
+                                        <svg width="70" height="70" viewBox="0 0 16 16" class="bi bi-key" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8zm4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5z"/>
+                                        <path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                      </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="bs-component">
+                            <fieldset class="form-group">
+                                <legend> </legend>
+                                <label for="customRange1"> </label>
+                                <input type="range" class="slider" min="0" max="255" id="slider_led" onchange="AtualizaLed()">
+                              </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="bs-component">
+                            <div class="row">
+                                <div class="col-md-3 col-12">
+                                    <div class="card border-success mb-3">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Controle de Luz</h4>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="card-body">
+                                                <div class="text-center">
+                                                    <div style="display:inline;width:200px;height:200px;">
+                                                        <input type="text" value="0" id="valor-luz" class="knob basic-dial">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-12" id="ConteudoTemperatura">
+                                    <div class="card border-success mb-3">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-8"><h4 class="card-title">Temperatura</h4></div>
+                                                <div class="col-4"><button type="submit" class="btn btn-success btn-block" onclick="ObterTemperatura()"><i class="fa fa-refresh" aria-hidden="true" style="font-size: 20px;"></i></button></div> 
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="card-body">
+                                                <div class="text-center">
+                                                    <div style="display:inline;width:200px;height:200px;">
+                                                        <input type="text" value="0" id="valor-temperatura" class="knob read-only" data-readonly="true" data-thickness=".4">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12" id="ConteudoRelogio">
+                                    <div class="card border-success mb-3">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-9"><h4 class="card-title">Graph</h4></div>
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="card-body">
+                                                <div class="text-center">
+                                                    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js"></script>
+        <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+        <script>
+
+            // obter temperatura de 15 em 15 segundos
+            var timerTemp = setInterval(ObterTemperatura, 15000);
+
+            var chart = new CanvasJS.Chart("chartContainer", { 
+                title: {
+                    text: "0°C"
+                },
+                theme: "dark1",
+                data: [
+                {
+                    type: "splineArea",
+                    dataPoints: [	
+                    ]
+                }
+                ]
+            });
+            chart.render();	
+
+
+            $(function() {
+                $("#valor-luz").knob({
+                    "release" : function (v) { AtualizaLed2(v);},
+                    "min":0,
+                    "max":255,
+                    "skin":"tron",
+                    "inputColor": "#00bc8c",
+                    "fgColor":"#00bc8c",
+                });
+
+                $("#valor-temperatura").knob({
+                    "min":0,
+                    "max":100,
+                    "skin":"tron",
+                    "inputColor": "#00bc8c",
+                    "fgColor":"#00bc8c",
+                });
+            });
+
+
+            $.ajax({
+                method: "POST",
+                url: "http://192.168.100.250/",
+                success: function(result){
+                    console.log(result);
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            });
+
+            function AtualizaLed(){
+                var valor = $("#slider_led").val();
+                console.log(valor);
+                $.ajax({
+                    method: "POST",
+                    url: `http://192.168.100.250/api/setpin/9/${valor}`,
+                    success: function(result){
+                        $("#valor-luz-alterado").html(valor);
+                        $('#valor-luz').val(valor).trigger('change');
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+            }
+            function AtualizaLed2(valor){
+                $.ajax({
+                    method: "POST",
+                    url: `http://192.168.100.250/api/setpin/9/${valor}`,
+                    success: function(result){
+                        $("#valor-luz-alterado").html(valor);
+                        $("#slider_led").val(valor)
+                        $('#valor-luz').val(valor).trigger('change');
+                        
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+            }
+
+            function ObterLuzLed(){
+                $.ajax({
+                    method: "POST",
+                    url: "http://192.168.100.250/",
+                    success: function(result){
+                        $("#slider_led").val(result.response["light-level"]);
+                        $("#valor-luz-alterado").html(result.response["light-level"]);
+                        $('#valor-luz').val(result.response["light-level"]).trigger('change');
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+            }
+
+            function ObterTemperatura(){
+                var time = new Date();
+                $.ajax({
+                    method: "POST",
+                    url: "http://192.168.100.250/",
+                    success: function(result){
+
+                        $('#valor-temperatura').val(result.response["temperature"] + "°").trigger("change");
+                        chart.options.title.text = result.response["temperature"] + "°";
+                        chart.options.data[0].dataPoints.push({label: time.getHours() + ":" + time.getMinutes() , y: result.response["temperature"]});
+                        chart.render();
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+            }
+            ObterLuzLed();
+            ObterTemperatura();
+        </script>
+    </body>
+</html>
