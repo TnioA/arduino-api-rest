@@ -1,4 +1,6 @@
 #include <Router.h>
+#include <FactoryJson.h>
+#include <Controller.h>
 #include <SPI.h>
 #include <Ethernet.h>
 #include <Controller.h>
@@ -6,91 +8,78 @@
 #include <string.h>
 #include <ctype.h>
 
-Router::Router(EthernetClient external_client, String external_url){
-    this->client = external_client;
-    this->url = external_url;
+Router::Router(){
 }
 
-void Router::RoutingUrl() {
-    Controller controller(this->client);
-
-    char params[10][100] = {"","","","","","","","","",""};
-    int index = 0;
-    String aux = "";
-    char* conc;
-
-    // IF THERE IS A " " AT THE END, IT'S REMOVED
-    if(this->url[this->url.length()-1] == ' '){
-        this->url.remove(this->url.length()-1, 1);
+String * Router::RouteRequest(String method, String request) {
+    static String response[2];
+    if(!StartsWith(request.c_str(), "/api/")){
+        return FactoryJson().ErrorResponse("Not finded an route that satisfyes this request.");
     }
 
-    // IF THERE IS A "/" AT THE END, IT'S REMOVED
-    while(this->url[this->url.length()-1] == '/'){
-        this->url.remove(this->url.length()-1, 1);
+    if(strstr(request.c_str(), "getdigitalpin") != NULL){
+        int pin = atoi(GetParam(request, "pin").c_str());
+        return Controller().GetDigitalPin(pin);
     }
-    
-    //SESSION FOR GETTING PARAMS
-    if(this->url.length() > 2){
-        for(int i = 0; i < this->url.length(); i++){
-        if(this->url[i] == '/'){
-            aux = "";
-            if(i > 0){
-            index++;   
-            }
-        }else{
-            aux = this->url[i];
-            char* foo = aux.c_str();
-            strcat(params[index], foo);
-        }
-        }
+    else if(strstr(request.c_str(), "getanalogpin") != NULL){
+        int pin = atoi(GetParam(request, "pin").c_str());
+        return Controller().GetAnalogPin(pin);
     }
-
-    // PRINCIPAL RETURN
-    controller.ReturnInfo(this->url, params, index);
-
-    //MAPPING ROUTES CONTENT
-    if(strcmp(params[0], "") == 0){
-        controller.ReturnValues();   
+    else if(strstr(request.c_str(), "setdigitalpin") != NULL){
+        int pin = atoi(GetParam(request, "pin").c_str());
+        int value = atoi(GetParam(request, "value").c_str());
+        return Controller().SetDigitalPin(pin, value);
     }
-    else if(strcmp(params[0], "api") == 0){
-        if(strcmp(params[1], "setpin") == 0){
-            if(isdigit(*params[2])){
-                if((strcmp(params[3], "true") == 0) || (strcmp(params[3], "false") == 0)){
-                        controller.SetDigitalPin(atoi(params[2]), (strcmp(params[3], "true") == 0) ? true : false);
-                }else{
-                    if(isdigit(*params[3])){
-                        controller.SetAnalogPin(atoi(params[2]), atoi(params[3]));
-                    }else{
-                        controller.ErrorMessage();
-                    }
-                }
-            }else{
-                controller.ErrorMessage();
-            }
-        }
-        else if(strcmp(params[1], "getdigitalpin") == 0){
-            if(isdigit(*params[2])){
-                controller.GetDigitalPin(atoi(params[2]));
-            }else{
-                controller.ErrorMessage();
-            }
-        }
-        else if(strcmp(params[1], "getanalogpin") == 0){
-            if(isdigit(*params[2])){
-                controller.GetAnalogPin(atoi(params[2]));
-            }else{
-                controller.ErrorMessage();
-            }
-        }
-        else{
-            controller.ErrorMessage();
-        }
+    else if(strstr(request.c_str(), "setanalogpin") != NULL){
+        int pin = atoi(GetParam(request, "pin").c_str());
+        int value = atoi(GetParam(request, "value").c_str());
+        return Controller().SetAnalogPin(pin, value);
     }
     else{
-        controller.ErrorMessage();
+        return FactoryJson().ErrorResponse("Not finded an route that satisfies this request.");
+    }
+}
+
+bool Router::StartsWith(const char *a, const char *b)
+{
+   if(strncmp(a, b, strlen(b)) == 0) return 1;
+   return 0;
+}
+
+String Router::GetParam(String url, String paramName){
+    static String response[10];
+    String aux = "";
+    bool foundParam = 0;
+
+    char char_array[url.length() + 1];
+    strcpy(char_array, url.c_str());
+    char *token = strtok(char_array, "?");
+    int count = 0;
+    while (token != NULL)
+    {
+        if(count > 0){
+            aux = token;
+            break;
+        }
+        token = strtok(NULL, "?");
+
+        count++;
     }
 
-    // ENDING RETURN
-    client.print("}");
-    
+    char_array[aux.length() + 1];
+    strcpy(char_array, aux.c_str());
+    char *token2 = strtok(char_array, "&");
+    aux = "";
+    while (token2 != NULL)
+    {
+        if(StartsWith(token2, (paramName+"=").c_str())){
+            aux = token2;
+            aux.remove(0, paramName.length()+1);
+            break;
+        }
+
+        token2 = strtok(NULL, "&");
+    }
+
+    return aux;
 }

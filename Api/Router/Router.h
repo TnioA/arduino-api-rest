@@ -7,12 +7,13 @@
 
 class Router {
     private:
-        EthernetClient client;
-        String url;
+        EthernetClient _client;
 
     public: 
-        Router(EthernetClient external_client, String external_url);
-        void RoutingUrl();
+        Router();
+        String * RouteRequest(String method, String request);
+        String GetParam(String url, String param);
+	    bool StartsWith(const char*, const char*);
 };
 
 #endif

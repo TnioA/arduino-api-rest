@@ -1,18 +1,14 @@
 #ifndef _FACTORYJSON_H
 #define _FACTORYJSON_H
 
-#include <assert.h>
-#include <string.h>
-#include <ctype.h>
+#include <SPI.h>
 
 class FactoryJson {
-    private:
-        String content;
-
     public: 
         FactoryJson();
-        String SingleResponse(String key, String value);
-        String MultipleResponse(String key, char params[20][100], bool isObject);
+        String * ErrorResponse(String message);
+        String * DigitalPinResponse(int pin, String type, bool value);
+        String * AnalogPinResponse(int pin, String type, int value);
 };
 
 #endif

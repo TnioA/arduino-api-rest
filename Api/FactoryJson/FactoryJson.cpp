@@ -1,49 +1,53 @@
+#include <FactoryJson.h>
+#include <SPI.h>
 #include <assert.h>
 #include <string.h>
 #include <ctype.h>
 
+FactoryJson::FactoryJson(){}
 
-FactoryJson::FactoryJson(){
+String * FactoryJson::ErrorResponse(String message){
+    static String response[2];
 
+    response[0] = "400";
+    response[1] = "{\"error\":\""+ message +"\",\"success\":\"false\"}";
+    return response; 
 }
 
-String FactoryJson::SingleResponse(String key, String value){
-    this-> content = "{\"";
-    this->content = this->content + key;
-    this->content = "\":";
-    if(isdigit(value)){
-       this->content = "\":"; 
-       this->content = value;
-       this->content = "}";
-    }else{
-        this->content = "\":\"";
-        this->content = value;
-        this->content = "\"}";
-    }
-    return this->key; 
+String * FactoryJson::DigitalPinResponse(int pin, String type, bool value){
+    static String response[2];
+    String trueValue = value ? "true" : "false";
+
+    response[0] = "200";
+    response[1] = "";
+    response[1] += "{\"pin\":";
+    response[1] += "{\"code\":\"D";
+    response[1] += pin;
+    response[1] += "\",";
+    response[1] += "\"type\":\"" + type + "\"";
+    response[1] += ",";
+    response[1] += "\"value\":\"" +  trueValue + "\"";
+    response[1] += "},";
+    response[1] += "\"success\":\"true\"}";
+    
+    return response; 
 }
 
-String FactoryJson::MultipleResponse(String key, char params[20][100], bool isObject){
+String * FactoryJson::AnalogPinResponse(int pin, String type, int value){
+    static String response[2];
 
-    int index = 0;
+    response[0] = "200";
+    response[1] = "";
+    response[1] += "{\"pin\":";
+    response[1] += "{\"code\":\"A";
+    response[1] += pin;
+    response[1] += "\",";
+    response[1] += "\"type\":\"" + type + "\"";
+    response[1] += ",";
+    response[1] += "\"value\":";
+    response[1] += value;
+    response[1] += "},";
+    response[1] += "\"success\":\"true\"}";
 
-    this-> content = "{\"";
-    this->content = this->content + key;
-    this->content = "\":[";  
-    for(int i=0;i<=index;i++){
-        if(strcmp(params[i], "") != 0){
-        if(isdigit(*params[i])){s
-            this->client.print(params[i]);
-        }else{
-            this->client.print("\"");
-            this->client.print(params[i]);
-            this->client.print("\"");
-        }
-        }
-        if(index > 0 && i < index){
-        this->client.print(",");
-        }
-    }
-    this->client.print("]");
-
+    return response; 
 }

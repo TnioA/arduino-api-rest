@@ -6,18 +6,12 @@
 #include <Ethernet.h>
 
 class Controller {
-    private:
-        EthernetClient client;
-
     public: 
-        Controller(EthernetClient external_client);
-        void ReturnInfo(String url, char params[10][100], int index);
-        void ReturnValues();
-        void SetDigitalPin(int pin, bool value);
-        void SetAnalogPin(int pin, int value);
-        void GetDigitalPin(int pin);
-        void GetAnalogPin(int pin);
-        void ErrorMessage();
+        Controller();
+        String * SetDigitalPin(int pin, bool value);
+        String * SetAnalogPin(int pin, int value);
+        String * GetDigitalPin(int pin);
+        String * GetAnalogPin(int pin);
 };
 
 #endif
