@@ -14,6 +14,22 @@ String * FactoryJson::ErrorResponse(String message){
     return response; 
 }
 
+String * FactoryJson::PinSettedResponse(int pin, String type){
+    static String response[2];
+
+    response[0] = "200";
+    response[1] = "";
+    response[1] += "{\"pin\":";
+    response[1] += "{\"code\":\"";
+    response[1] += pin;
+    response[1] += "\",";
+    response[1] += "\"type\":\"" + type + "\"";
+    response[1] += "},";
+    response[1] += "\"success\":\"true\"}";
+    
+    return response; 
+}
+
 String * FactoryJson::DigitalPinResponse(int pin, String type, bool value){
     static String response[2];
     String trueValue = value ? "true" : "false";

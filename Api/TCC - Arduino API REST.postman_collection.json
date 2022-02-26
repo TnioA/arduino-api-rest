@@ -1,0 +1,228 @@
+{
+	"info": {
+		"_postman_id": "79fabd84-4b5c-4f35-b3cc-13ad5c7192a7",
+		"name": "TCC - Arduino API REST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Obter leitura digital de um pino",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"teste\": \"botsa\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{arduino-api-url}}/api/getdigitalpin?pin=7",
+					"host": [
+						"{{arduino-api-url}}"
+					],
+					"path": [
+						"api",
+						"getdigitalpin"
+					],
+					"query": [
+						{
+							"key": "pin",
+							"value": "7"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obter leitura analogica de um pino",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"teste\": \"botsa\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{arduino-api-url}}/api/getanalogpin?pin=0",
+					"host": [
+						"{{arduino-api-url}}"
+					],
+					"path": [
+						"api",
+						"getanalogpin"
+					],
+					"query": [
+						{
+							"key": "pin",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Setar tipo do pino",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"teste\": \"botsa\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{arduino-api-url}}/api/setpintype?pin=7&type=output",
+					"host": [
+						"{{arduino-api-url}}"
+					],
+					"path": [
+						"api",
+						"setpintype"
+					],
+					"query": [
+						{
+							"key": "pin",
+							"value": "7"
+						},
+						{
+							"key": "type",
+							"value": "output"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Setar valor digital ao pino",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"teste\": \"botsa\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{arduino-api-url}}/api/setdigitalpin?pin=7&value=0",
+					"host": [
+						"{{arduino-api-url}}"
+					],
+					"path": [
+						"api",
+						"setdigitalpin"
+					],
+					"query": [
+						{
+							"key": "pin",
+							"value": "7"
+						},
+						{
+							"key": "value",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Setar valor analogico ao pino",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"teste\": \"botsa\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{arduino-api-url}}/api/setanalogpin?pin=7&value=15",
+					"host": [
+						"{{arduino-api-url}}"
+					],
+					"path": [
+						"api",
+						"setanalogpin"
+					],
+					"query": [
+						{
+							"key": "pin",
+							"value": "7"
+						},
+						{
+							"key": "value",
+							"value": "15"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "arduino-api-url",
+			"value": "http://192.168.0.15",
+			"type": "default"
+		}
+	]
+}

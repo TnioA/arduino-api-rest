@@ -8,8 +8,7 @@
 #include <string.h>
 #include <ctype.h>
 
-Router::Router(){
-}
+Router::Router(){}
 
 String * Router::RouteRequest(String method, String request) {
     static String response[2];
@@ -17,6 +16,11 @@ String * Router::RouteRequest(String method, String request) {
         return FactoryJson().ErrorResponse("Not finded an route that satisfyes this request.");
     }
 
+    if(strstr(request.c_str(), "setpintype") != NULL){
+        int pin = atoi(GetParam(request, "pin").c_str());
+        String type = GetParam(request, "type");
+        return Controller().SetPinType(pin, type);
+    }
     if(strstr(request.c_str(), "getdigitalpin") != NULL){
         int pin = atoi(GetParam(request, "pin").c_str());
         return Controller().GetDigitalPin(pin);

@@ -7,6 +7,7 @@ class FactoryJson {
     public: 
         FactoryJson();
         String * ErrorResponse(String message);
+        String * PinSettedResponse(int pin, String type);
         String * DigitalPinResponse(int pin, String type, bool value);
         String * AnalogPinResponse(int pin, String type, int value);
 };

@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Control - Arduino Mega</title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.es.gov.br/fonts/font-awesome/css/font-awesome.min.css">
     <style>
         .slider {
         -webkit-appearance: none;
@@ -65,8 +65,13 @@
                     <div class="col-12">
                         <div class="bs-component">
                             <div class="row">
-                                <div class="col-12">
-                                    <button type="button" class="btn btn-block btn-outline-success" onclick="OnOffLedLight(100)">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-block btn-outline-success btn-light-on-off" onclick="UpdateLedLight(0)" id="lightsOffBtn" disabled>
+                                        <i class="fa fa-power-off" aria-hidden="true" style="font-size: 70px;"></i>
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-block btn-outline-success btn-light-on-off" onclick="UpdateLedLight(255)" id="lightsOnBtn">
                                         <svg width="70" height="70" viewBox="0 0 16 16" class="bi bi-sun" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M3.5 8a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0z"/>
                                             <path fill-rule="evenodd" d="M8.202.28a.25.25 0 0 0-.404 0l-.91 1.255a.25.25 0 0 1-.334.067L5.232.79a.25.25 0 0 0-.374.155l-.36 1.508a.25.25 0 0 1-.282.19l-1.532-.245a.25.25 0 0 0-.286.286l.244 1.532a.25.25 0 0 1-.189.282l-1.509.36a.25.25 0 0 0-.154.374l.812 1.322a.25.25 0 0 1-.067.333l-1.256.91a.25.25 0 0 0 0 .405l1.256.91a.25.25 0 0 1 .067.334L.79 10.768a.25.25 0 0 0 .154.374l1.51.36a.25.25 0 0 1 .188.282l-.244 1.532a.25.25 0 0 0 .286.286l1.532-.244a.25.25 0 0 1 .282.189l.36 1.508a.25.25 0 0 0 .374.155l1.322-.812a.25.25 0 0 1 .333.067l.91 1.256a.25.25 0 0 0 .405 0l.91-1.256a.25.25 0 0 1 .334-.067l1.322.812a.25.25 0 0 0 .374-.155l.36-1.508a.25.25 0 0 1 .282-.19l1.532.245a.25.25 0 0 0 .286-.286l-.244-1.532a.25.25 0 0 1 .189-.282l1.508-.36a.25.25 0 0 0 .155-.374l-.812-1.322a.25.25 0 0 1 .067-.333l1.256-.91a.25.25 0 0 0 0-.405l-1.256-.91a.25.25 0 0 1-.067-.334l.812-1.322a.25.25 0 0 0-.155-.374l-1.508-.36a.25.25 0 0 1-.19-.282l.245-1.532a.25.25 0 0 0-.286-.286l-1.532.244a.25.25 0 0 1-.282-.189l-.36-1.508a.25.25 0 0 0-.374-.155l-1.322.812a.25.25 0 0 1-.333-.067L8.203.28zM8 2.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z"/>
@@ -140,20 +145,27 @@
             var ledLevel = 0;
 
             // obter temperatura de 15 em 15 segundos
-            var timerTemp = setInterval(ObterTemperatura, 5000);
+            var timerTemp = setInterval(ObterTemperatura, 15000);
 
+            // setar o pino 7 como saida
+            fetch(`${apiUrl}/api/setpintype?pin=7&type=output`).then(x=> {
+                if(x.status != 200) console.log("Erro ao setar o pino 7 para saida");
+            });
+
+            var localTempData = JSON.parse(localStorage.getItem("localTempData")?? "[]");
             var chart = new CanvasJS.Chart("chartContainer", { 
                 animationEnabled: true,
                 title: {
                     text: "0°C"
                 },
-                theme: "dark1",           
+                theme: "dark1",   
+                backgroundColor: "#303030",        
                 markerSize: 5,
                 data: [
                     {
                         color: "rgba(0,188,140,1)",
                         type: "splineArea",
-                        dataPoints: []
+                        dataPoints: localTempData
                     }
                 ]
             });
@@ -178,22 +190,35 @@
                 });
             });
 
-            function OnOffLedLight(){
-                if(ledLevel > 0){
-                    ledLevel = 0;
-                } else{
-                    ledLevel = 255;
-                }
-
-                UpdateLedLight(ledLevel);
-            }
-
             function UpdateLedLight(value){
                 ledLevel = value;
-                fetch(`${apiUrl}/api/setanalogpin?pin=7&value=${value}`).then(x=> x.json()).then(x=> {
+                fetch(`${apiUrl}/api/setanalogpin?pin=7&value=${value}`).then(x=> {
+                    var response = x.status == 200 ? x.json(): null;
+                    value = response != null ? value : 0;
+
                     $("#valor-luz-alterado").html(value);
                     $("#slider_led").val(value)
                     $('#valor-luz').val(value).trigger('change');
+                    $('.btn-light-on-off').removeClass('btn-outline-success');
+                    $('.btn-light-on-off').removeClass('btn-success');
+
+                    if(value == 0){    
+                        $('#lightsOffBtn').addClass('btn-success');
+                        $('#lightsOffBtn').attr('disabled', 'disabled');
+                        $('#lightsOnBtn').removeAttr('disabled');
+                        $('#lightsOnBtn').addClass('btn-outline-success');
+                    }
+                    else if(value == 255){    
+                        $('#lightsOffBtn').addClass('btn-outline-success');
+                        $('#lightsOffBtn').removeAttr('disabled');
+                        $('#lightsOnBtn').attr('disabled', 'disabled');
+                        $('#lightsOnBtn').addClass('btn-success');
+                    }
+                    else{
+                        $('.btn-light-on-off').addClass('btn-outline-success');
+                        $('#lightsOffBtn').removeAttr('disabled');
+                        $('#lightsOnBtn').removeAttr('disabled');
+                    }
                 });
             }
 
@@ -203,9 +228,15 @@
                 fetch(`${apiUrl}/api/getanalogpin?pin=0`).then(x=> x.json()).then(x=> {
                     var tempAux = (x.pin.value * 100) / 1023;
                     var temp = ((tempAux * 500) / 100) - 50;
-                    $('#valor-temperatura').val(temp.toFixed(2) + "°").trigger("change");
-                    chart.options.title.text = temp.toFixed(2) + "°";
-                    chart.options.data[0].dataPoints.push({label: time.getHours() + ":" + time.getMinutes() , y: temp});
+
+                    var localTempData = JSON.parse(localStorage.getItem("localTempData")?? "[]");
+                    var actualValue = {label: time.getHours() + ":" + time.getMinutes() , y: parseInt(temp)};
+                    localTempData.push(actualValue);
+                    localStorage.setItem("localTempData", JSON.stringify(localTempData));
+           
+                    $('#valor-temperatura').val(temp.toFixed(0) + "°").trigger("change");
+                    chart.options.title.text = temp.toFixed(0) + "°";
+                    chart.options.data[0].dataPoints.push(actualValue);
                     chart.render();
                 });
             }
