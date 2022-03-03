@@ -7,21 +7,9 @@
 	"item": [
 		{
 			"name": "Obter leitura digital de um pino",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"teste\": \"botsa\"}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "{{arduino-api-url}}/api/getdigitalpin?pin=7",
 					"host": [
@@ -43,21 +31,9 @@
 		},
 		{
 			"name": "Obter leitura analogica de um pino",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"teste\": \"botsa\"}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "{{arduino-api-url}}/api/getanalogpin?pin=0",
 					"host": [
@@ -79,21 +55,9 @@
 		},
 		{
 			"name": "Setar tipo do pino",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"teste\": \"botsa\"}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "{{arduino-api-url}}/api/setpintype?pin=7&type=output",
 					"host": [
@@ -119,21 +83,9 @@
 		},
 		{
 			"name": "Setar valor digital ao pino",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"teste\": \"botsa\"}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "{{arduino-api-url}}/api/setdigitalpin?pin=7&value=0",
 					"host": [
@@ -159,21 +111,9 @@
 		},
 		{
 			"name": "Setar valor analogico ao pino",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"teste\": \"botsa\"}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "{{arduino-api-url}}/api/setanalogpin?pin=7&value=15",
 					"host": [
