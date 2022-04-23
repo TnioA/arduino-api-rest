@@ -21,7 +21,7 @@ String * Router::RouteRequest(String method, String request) {
         String type = GetParam(request, "type");
         return Controller().SetPinType(pin, type);
     }
-    if(strstr(request.c_str(), "getdigitalpin") != NULL){
+    else if(strstr(request.c_str(), "getdigitalpin") != NULL){
         int pin = atoi(GetParam(request, "pin").c_str());
         return Controller().GetDigitalPin(pin);
     }

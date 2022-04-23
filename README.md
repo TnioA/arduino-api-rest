@@ -1,8 +1,8 @@
 # ArduinoApiRest
 
-PROJETO PRO MEU TCC
+PROJETO TCC - API REST JSON COM ARDUINO E ETHERNET SHIELD
 
-Utilizei as bibliotecas
+# Bibliotecas utilizadas
 Ethernet.h
 SPI.h
 
