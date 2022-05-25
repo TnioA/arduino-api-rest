@@ -5,12 +5,15 @@
 #include <Ethernet.h>
 #include <DHT.h>
 
-#define DHTPIN 3
+#define DHTPIN 2
 #define DHTTYPE DHT11 
 
 DHT dht(DHTPIN, DHTTYPE);
 
-Controller::Controller(){}
+
+Controller::Controller(){
+  dht.begin();
+}
 
 // route: /api/setpintype/
 DataResponse Controller::SetPinType(int pin, String type){
@@ -64,14 +67,12 @@ DataResponse Controller::GetAnalogPin(int pin){
 DataResponse Controller::GetVirtualPin(int pin){
   switch (pin){
     case 150:
-      dht.begin();
-      delay(500);
-      return DataResponse().SuccessData(PinModel(pin, "output", "V", dht.readTemperature()).ToJson());
+      delay(2000);
+      return DataResponse().SuccessData(PinModel(pin, "output", "V", dht.readTemperature() - 3).ToJson());
       break;
     case 151:
-      dht.begin();
-      delay(500);
-      return DataResponse().SuccessData(PinModel(pin, "output", "V", dht.readHumidity()).ToJson());
+      delay(2000);
+      return DataResponse().SuccessData(PinModel(pin, "output", "V", dht.readHumidity() + 3).ToJson());
       break;
     default:
       return DataResponse().ErrorResponse("Any value was founded for this pin.");
