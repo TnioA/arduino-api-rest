@@ -1,17 +1,18 @@
-#include <Proccessor.h>
+#include <Processor.h>
 #include <Router.h>
+#include <DataResponse.h>
 #include <SPI.h>
 #include <Ethernet.h>
 #include <assert.h>
 #include <string.h>
 #include <ctype.h>
 
-Proccessor::Proccessor(EthernetClient externalClient){
+Processor::Processor(EthernetClient externalClient){
     _client = externalClient;
     _router = Router();
 }
 
-void Proccessor::ProccessRequest() {
+void Processor::ProcessRequest() {
     if (_client) {
         boolean currentLineIsBlank = true;
         String requestContent = "";
@@ -27,9 +28,13 @@ void Proccessor::ProccessRequest() {
         }
     
         // response client
-        String * response = _router.RouteRequest(GetMethod(requestContent), GetUrl(requestContent));
-        SetHeaders(_client, atoi(response[0].c_str()));
-        _client.print(response[1]);
+        DataResponse response = _router.RouteRequest(GetMethod(requestContent), GetUrl(requestContent));
+        SetHeaders(_client, response.StatusCode);
+        if(response.StatusCode == 200){
+            _client.print(response.Content);
+        }else{
+            _client.print(response.Error);
+        }
 
         // close connection
         delay(1);
@@ -37,7 +42,7 @@ void Proccessor::ProccessRequest() {
     }
 }
 
-String Proccessor::GetMethod(String fullRequest)
+String Processor::GetMethod(String fullRequest)
 {
     if(strncmp(fullRequest.c_str(), "POST", strlen("POST")) == 0) return "POST";
     else if(strncmp(fullRequest.c_str(), "PUT", strlen("PUT")) == 0) return "PUT";
@@ -45,7 +50,7 @@ String Proccessor::GetMethod(String fullRequest)
     else return "GET";
 }
 
-String Proccessor::GetUrl(String fullRequest){
+String Processor::GetUrl(String fullRequest){
     String url = "";
     bool aux = 0;
 
@@ -67,7 +72,7 @@ String Proccessor::GetUrl(String fullRequest){
     return url;  
 }
 
-void Proccessor::SetHeaders(EthernetClient client, int statusCode){
+void Processor::SetHeaders(EthernetClient client, int statusCode){
     switch (statusCode){
         case 200:
             client.println("HTTP/1.1 200 OK");

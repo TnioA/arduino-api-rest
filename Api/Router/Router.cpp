@@ -1,5 +1,5 @@
 #include <Router.h>
-#include <FactoryJson.h>
+#include <DataResponse.h>
 #include <Controller.h>
 #include <SPI.h>
 #include <Ethernet.h>
@@ -10,10 +10,10 @@
 
 Router::Router(){}
 
-String * Router::RouteRequest(String method, String request) {
+DataResponse Router::RouteRequest(String method, String request) {
     static String response[2];
     if(!StartsWith(request.c_str(), "/api/")){
-        return FactoryJson().ErrorResponse("Not finded an route that satisfyes this request.");
+        return DataResponse().ErrorResponse("Not finded an route that satisfyes this request.");
     }
 
     if(strstr(request.c_str(), "setpintype") != NULL){
@@ -29,6 +29,10 @@ String * Router::RouteRequest(String method, String request) {
         int pin = atoi(GetParam(request, "pin").c_str());
         return Controller().GetAnalogPin(pin);
     }
+    else if(strstr(request.c_str(), "getvirtualpin") != NULL){
+        int pin = atoi(GetParam(request, "pin").c_str());
+        return Controller().GetVirtualPin(pin);
+    }
     else if(strstr(request.c_str(), "setdigitalpin") != NULL){
         int pin = atoi(GetParam(request, "pin").c_str());
         int value = atoi(GetParam(request, "value").c_str());
@@ -40,7 +44,7 @@ String * Router::RouteRequest(String method, String request) {
         return Controller().SetAnalogPin(pin, value);
     }
     else{
-        return FactoryJson().ErrorResponse("Not finded an route that satisfies this request.");
+        return DataResponse().ErrorResponse("Not finded an route that satisfies this request.");
     }
 }
 

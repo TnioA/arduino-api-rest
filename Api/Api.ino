@@ -1,6 +1,6 @@
 #include <SPI.h>
 #include <Ethernet.h>
-#include <Proccessor.h>
+#include <Processor.h>
 
 byte mac[] = {
   0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
@@ -22,6 +22,6 @@ void setup() {
 
 void loop() {
     EthernetClient client = server.available();
-    Proccessor proccessor = Proccessor(client);
-    proccessor.ProccessRequest();
+    Processor processor = Processor(client);
+    processor.ProcessRequest();
 }

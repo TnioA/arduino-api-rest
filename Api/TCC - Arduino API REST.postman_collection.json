@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "79fabd84-4b5c-4f35-b3cc-13ad5c7192a7",
+		"_postman_id": "8e832bb1-eb12-422c-8831-17e56e835944",
 		"name": "TCC - Arduino API REST",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -47,6 +47,30 @@
 						{
 							"key": "pin",
 							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obter leitura virtual de um pino",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{arduino-api-url}}/api/getvirtualpin?pin=7",
+					"host": [
+						"{{arduino-api-url}}"
+					],
+					"path": [
+						"api",
+						"getvirtualpin"
+					],
+					"query": [
+						{
+							"key": "pin",
+							"value": "7"
 						}
 					]
 				}

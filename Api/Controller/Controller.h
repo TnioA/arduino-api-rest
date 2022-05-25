@@ -4,15 +4,21 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <Ethernet.h>
+#include <DataResponse.h>
+#include <PinModel.h>
+#include <DHT.h>
 
 class Controller {
     public: 
         Controller();
-        String * SetPinType(int pin, String type);
-        String * SetDigitalPin(int pin, bool value);
-        String * SetAnalogPin(int pin, int value);
-        String * GetDigitalPin(int pin);
-        String * GetAnalogPin(int pin);
+        DataResponse SetPinType(int pin, String type);
+
+        DataResponse SetDigitalPin(int pin, bool value);
+        DataResponse SetAnalogPin(int pin, int value);
+
+        DataResponse GetDigitalPin(int pin);
+        DataResponse GetAnalogPin(int pin);
+        DataResponse GetVirtualPin(int pin);
 
     private:
         int GetPinMode(uint8_t pin);

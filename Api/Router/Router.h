@@ -4,16 +4,18 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <Ethernet.h>
+#include <DataResponse.h>
 
 class Router {
-    private:
+    public: 
         EthernetClient _client;
 
-    public: 
         Router();
-        String * RouteRequest(String method, String request);
+        DataResponse RouteRequest(String method, String request);   
+
+    private:
         String GetParam(String url, String param);
-	    bool StartsWith(const char*, const char*);
+	    bool StartsWith(const char*, const char*);    
 };
 
 #endif
