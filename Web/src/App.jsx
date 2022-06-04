@@ -30,6 +30,9 @@ export default class App extends React.Component {
     }
 
     componentDidMount(){
+        // localStorage.setItem(TEMPERATURE_LOGS_NAME, JSON.stringify(tempData));
+        // localStorage.setItem(HUMIDITY_LOGS_NAME, JSON.stringify(humidData));
+
         var datapoints = JSON.parse(localStorage.getItem(TEMPERATURE_LOGS_NAME));
         if(datapoints != null && datapoints.length > 0){
             this.setState({temperatureList: datapoints, temperature: datapoints[datapoints.length - 1].y});
